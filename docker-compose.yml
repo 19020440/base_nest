@@ -1,0 +1,33 @@
+version: '3.0'
+
+services:  
+  nest:    
+    build: .    
+    ports:      
+      - 3000:3000    
+    networks:      
+      - nest_network    
+    links:      
+      - nest_db    
+    depends_on:      
+      - nest_db    
+    restart: 
+      always  
+  nest_db:    
+    image: mysql:8.0.27    
+    volumes:      
+      - .data/mysql:/var/lib/mysql    
+    ports:      
+      - 3306:3306    
+    #command: command    
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=secret    
+    networks:      
+        - nest_network
+      
+networks: 
+  nest_network:   
+    driver: bridge
